@@ -14,6 +14,17 @@
 # 4. На основе пункта 3 сделать метод класса create_transposed,
 # который будет принимать на вход список списков, как и в пункте 1,
 # но при этом создавать сразу транспонированную матрицу.
+# 5. Метод __add__ принимающий второй экземпляр класса Matrix и возвращающий
+# сумму матриц, если передалась на вход матрица другого размера - поднимать
+# исключение MatrixSizeError (по желанию реализовать так, чтобы текст ошибки
+# содержал размерность 1 и 2 матриц - пример:"Matrixes have different sizes -
+# Matrix(x1, y1) and Matrix(x2, y2)")
+# 6. __mul__ принимающий число типа int или float и
+# возвращающий матрицу, умноженную на скаляр.
+# 7. __str__ переводящий матрицу в строку. Столбцы разделены между собой
+# табуляцией, а строки — переносами строк (символ новой строки). При этом
+# после каждой строки не должно быть символа табуляции и в конце не должно
+# быть переноса строки
 from copy import deepcopy
 
 
@@ -21,6 +32,50 @@ class Matrix:
     def __init__(self, matrix):
         self.matrix = deepcopy(matrix)
 
+    def __get_my_empty_copy(self):
+        return [[] for i in range(len(self.matrix[0]))]
+
+    def __str__(self):
+        return '\n'.join(
+            ['\t'.join(
+                [str(element) for element in row]
+            ) for row in self.matrix]
+        )
+
+    def __mul__(self, scalar):
+        result = self.__get_my_empty_copy()
+
+        if not isinstance(scalar, (int, float)):
+            raise Exception('Give me my int or float, %username%')
+
+        for index_row, row in enumerate(self.matrix):
+            for index_element, element in enumerate(row):
+                result[index_row].append(element * scalar)
+
+        return result
+
+    def __add__(self, second_matrix_obj):
+        result = self.__get_my_empty_copy()
+
+        if not isinstance(second_matrix_obj, Matrix):
+            raise Exception('Neo not happy.')
+
+        if not self.get_size == second_matrix_obj.get_size:
+            raise Exception(
+                f"Matrices have different sizes - Matrix{self.get_size} "
+                f"and Matrix{second_matrix_obj.get_size}"
+            )
+
+        second_matrix = second_matrix_obj.matrix
+        for index_row, row in enumerate(self.matrix):
+            for index_element, element in enumerate(row):
+                result[index_row].append(
+                    element + second_matrix[index_row][index_element]
+                )
+
+        return result
+
+    @property
     def get_size(self):
         columns = len(self.matrix)
         rows = len(self.matrix[0])
@@ -28,7 +83,7 @@ class Matrix:
         return rows, columns
 
     def get_transpose(self):
-        result = [[] for i in range(len(self.matrix[0]))]
+        result = self.__get_my_empty_copy()
 
         for index_row, row in enumerate(self.matrix):
             for index_element, element in enumerate(row):
@@ -61,7 +116,7 @@ if __name__ == '__main__':
     ]
 
     matrix_obj = Matrix(data)
-    print(f'Size of matrix {matrix_obj.get_size()}')
+    print(f'Size of matrix {matrix_obj.get_size}')
     print('Initial matrix')
     Matrix.matrix_print(matrix_obj.matrix)
     # Transpose matrix
@@ -78,3 +133,15 @@ if __name__ == '__main__':
     print('Mute data source')
     data[1][1] = 'Some new value'
     Matrix.matrix_print(matrix_immmut_obj.matrix)
+
+    print('Second part of tasks')
+    print(str(matrix_immmut_obj))
+    print(matrix_immmut_obj * 2)
+    matrix_dif_size = Matrix([
+        [1, 2, 3, 4],
+        [1, 2, 3, 4]
+    ])
+    print(matrix_immmut_obj + matrix_immmut_obj)
+    print(matrix_immmut_obj + matrix_dif_size)
+
+
