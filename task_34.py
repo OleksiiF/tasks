@@ -32,9 +32,6 @@ class Matrix:
     def __init__(self, matrix):
         self.matrix = deepcopy(matrix)
 
-    def __get_my_empty_copy(self):
-        return [[] for i in range(len(self.matrix[0]))]
-
     def __str__(self):
         return '\n'.join(
             ['\t'.join(
@@ -43,19 +40,15 @@ class Matrix:
         )
 
     def __mul__(self, scalar):
-        result = self.__get_my_empty_copy()
-
         if not isinstance(scalar, (int, float)):
             raise Exception('Give me my int or float, %username%')
 
-        for index_row, row in enumerate(self.matrix):
-            for index_element, element in enumerate(row):
-                result[index_row].append(element * scalar)
-
-        return result
+        return [
+            [element * scalar for element in row]
+            for row in self.matrix
+        ]
 
     def __add__(self, second_matrix_obj):
-        result = self.__get_my_empty_copy()
 
         if not isinstance(second_matrix_obj, Matrix):
             raise Exception('Neo not happy.')
@@ -66,14 +59,10 @@ class Matrix:
                 f"and Matrix{second_matrix_obj.size}"
             )
 
-        second_matrix = second_matrix_obj.matrix
-        for index_row, row in enumerate(self.matrix):
-            for index_element, element in enumerate(row):
-                result[index_row].append(
-                    element + second_matrix[index_row][index_element]
-                )
-
-        return result
+        return [
+            [a + b for a, b in zip(row_a, row_b)]
+            for row_a, row_b in zip(self.matrix, second_matrix_obj.matrix)
+        ]
 
     @property
     def size(self):
@@ -83,16 +72,9 @@ class Matrix:
         return rows, columns
 
     def get_transpose(self):
-        result = self.__get_my_empty_copy()
+        self.matrix = list(map(list, (zip(*self.matrix))))
 
-        for index_row, row in enumerate(self.matrix):
-            for index_element, element in enumerate(row):
-                result[index_element].append(element)
-        # result = list(zip(*self.matrix))  # more  variant
-
-        self.matrix = result
-
-        return result
+        return self.matrix
 
     @classmethod
     def create_transposed(cls, matrix):
@@ -138,9 +120,14 @@ if __name__ == '__main__':
     print('Second part of tasks')
     print(str(matrix_immmut_obj))
     print(matrix_immmut_obj * 2)
+    print(matrix_immmut_obj + matrix_immmut_obj)
     matrix_dif_size = Matrix([
         [1, 2, 3, 4],
         [1, 2, 3, 4]
     ])
-    print(matrix_immmut_obj + matrix_immmut_obj)
-    print(matrix_immmut_obj + matrix_dif_size)
+
+    try:
+        matrix_immmut_obj + matrix_dif_size
+
+    except Exception as e:
+        print(e)
