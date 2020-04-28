@@ -60,10 +60,10 @@ class Matrix:
         if not isinstance(second_matrix_obj, Matrix):
             raise Exception('Neo not happy.')
 
-        if not self.get_size == second_matrix_obj.get_size:
+        if not self.size == second_matrix_obj.size:
             raise Exception(
-                f"Matrices have different sizes - Matrix{self.get_size} "
-                f"and Matrix{second_matrix_obj.get_size}"
+                f"Matrices have different sizes - Matrix{self.size} "
+                f"and Matrix{second_matrix_obj.size}"
             )
 
         second_matrix = second_matrix_obj.matrix
@@ -76,7 +76,7 @@ class Matrix:
         return result
 
     @property
-    def get_size(self):
+    def size(self):
         columns = len(self.matrix)
         rows = len(self.matrix[0])
 
@@ -88,6 +88,7 @@ class Matrix:
         for index_row, row in enumerate(self.matrix):
             for index_element, element in enumerate(row):
                 result[index_element].append(element)
+        # result = list(zip(*self.matrix))  # more  variant
 
         self.matrix = result
 
@@ -116,7 +117,7 @@ if __name__ == '__main__':
     ]
 
     matrix_obj = Matrix(data)
-    print(f'Size of matrix {matrix_obj.get_size}')
+    print(f'Size of matrix {matrix_obj.size}')
     print('Initial matrix')
     Matrix.matrix_print(matrix_obj.matrix)
     # Transpose matrix
@@ -143,5 +144,3 @@ if __name__ == '__main__':
     ])
     print(matrix_immmut_obj + matrix_immmut_obj)
     print(matrix_immmut_obj + matrix_dif_size)
-
-
