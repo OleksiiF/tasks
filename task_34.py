@@ -29,6 +29,7 @@ from copy import deepcopy
 
 
 class Matrix:
+
     def __init__(self, matrix):
         self.matrix = deepcopy(matrix)
 
@@ -49,7 +50,6 @@ class Matrix:
         ]
 
     def __add__(self, second_matrix_obj):
-
         if not isinstance(second_matrix_obj, Matrix):
             raise Exception('Neo not happy.')
 
@@ -130,4 +130,4 @@ if __name__ == '__main__':
         matrix_immmut_obj + matrix_dif_size
 
     except Exception as e:
-        print(e)
+        print(f"Huston, we have a problem here. I mean {e}")
