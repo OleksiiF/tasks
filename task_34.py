@@ -53,7 +53,7 @@ class Matrix:
         if not isinstance(second_matrix_obj, Matrix):
             raise Exception('Neo not happy.')
 
-        if not self.size == second_matrix_obj.size:
+        if self.size != second_matrix_obj.size:
             raise Exception(
                 f"Matrices have different sizes - Matrix{self.size} "
                 f"and Matrix{second_matrix_obj.size}"
