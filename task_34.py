@@ -25,6 +25,13 @@
 # табуляцией, а строки — переносами строк (символ новой строки). При этом
 # после каждой строки не должно быть символа табуляции и в конце не должно
 # быть переноса строки
+# 8. Реализовать подсчёт елементов в классе
+# Matrix с помощью collections.Counter.
+# Можно реализовать протоколом итератора и тогда будет такой вызов -
+# Counter(maxtrix). Либо сделать какой-то метод get_counter(), который
+# будет возвращать объект Counter и подсчитывать все элементы внутри
+# матрицы. Какой метод - ваш выбор.
+from collections import Counter
 from copy import deepcopy
 
 
@@ -75,6 +82,9 @@ class Matrix:
         self.matrix = list(map(list, (zip(*self.matrix))))
 
         return self.matrix
+
+    def get_counter(self):
+        return Counter(sum(self.matrix, [ ]))
 
     @classmethod
     def create_transposed(cls, matrix):
@@ -131,3 +141,6 @@ if __name__ == '__main__':
 
     except Exception as e:
         print(f"Huston, we have a problem here. I mean {e}")
+
+    print('Third part of tasks')
+    print(matrix_immmut_obj.get_counter())

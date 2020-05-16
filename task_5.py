@@ -6,6 +6,9 @@ from abc import ABCMeta, abstractmethod
 
 
 # block of vehicle types
+from typing import Union
+
+
 class Vehicle:
 
     def __init__(self):
@@ -47,11 +50,11 @@ class ElectroPickup(Vehicle):
 class MainProducer(metaclass=ABCMeta):
 
     @abstractmethod
-    def get_sedan(self) -> Sedan:
+    def get_sedan(self) -> Union[Sedan, ElectroSedan]:
         pass
 
     @abstractmethod
-    def get_pickup(self) -> Pickup:
+    def get_pickup(self) -> Union[Pickup, ElectroPickup]:
         pass
 
 
@@ -81,9 +84,10 @@ class Holding:
             'audi': Audi()
         }
 
+    # Singleton
     def __new__(cls):
         if not hasattr(cls, 'instance'):
-            cls.instance = super(Holding, cls).__new__(cls)
+            cls.instance = super().__new__(cls)
 
         return cls.instance
 
